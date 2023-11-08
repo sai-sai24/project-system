@@ -4,26 +4,18 @@ import Header from './Components/Layout/Header'
 import Footer from './Components/Layout/Footer'
 import Home from './Components/Home'
 import ProductDetails from './Components/Product/ProductDetails'
-import Login from './Components/User/Login'
-import Register from './Components/User/Register';
-import Profile from './Components/User/Profile'
-import UpdateProfile from './Components/User/UpdateProfile';
-import ForgotPassword from './Components/User/ForgotPassword';
-import NewPassword from './Components/User/NewPassword';
-import UpdatePassword from './Components/User/UpdatePassword';
-import Cart from './Components/Cart/Cart';
+
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
-import Shipping from './Components/Cart/Shipping';
-import ConfirmOrder from './Components/Cart/ConfirmOrder';
-import Payment from './Components/Cart/Payment';
-import OrderSuccess from './Components/Cart/OrderSuccess';
-import ListOrders from './Components/Order/ListOrders';
-import OrderDetails from './Components/Order/OrderDetails';
-import Dashboard from './Components/Admin/Dashboard';
-import NewProduct from './Components/Admin/NewProduct';
-import ProductsList from './Components/Admin/ProductsList';
+
+import Cart from './Components/Cart/Cart'; 
+import Shipping from './Components/Cart/Shipping'; 
+import ConfirmOrder from './Components/Cart/ConfirmOrder'; 
+import Payment from './Components/Cart/Payment'; 
+import OrderSuccess from './Components/Cart/OrderSuccess'; 
+import ListOrders from './Components/Order/ListOrders'; 
+import OrderDetails from './Components/Order/OrderDetails'; 
 
 function App() {
   const [state, setState] = useState({
@@ -103,14 +95,14 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails cartItems={state.cartItems} addItemToCart={addItemToCart} />} exact="true" />
           <Route path="/search/:keyword" element={<Home />} exact="true" />
 
-          <Route path="/login" element={<Login />} exact="true" />
+          {/* <Route path="/login" element={<Login />} exact="true" />
           <Route path="/register" element={<Register />} exact="true" />
           <Route path="/me" element={<Profile />} exact="true" />
           <Route path="/me/update" element={<UpdateProfile />} exact="true"
           />
           <Route path="/password/forgot" element={<ForgotPassword />} exact="true" />
           <Route path="/password/reset/:token" element={<NewPassword />} exact="true" />
-          <Route path="/password/update" element={<UpdatePassword />} />
+          <Route path="/password/update" element={<UpdatePassword />} /> */}
 
           <Route path="/cart" element={<Cart cartItems={state.cartItems} addItemToCart={addItemToCart} removeItemFromCart={removeItemFromCart} />} exact="true" />
           <Route path="/shipping" element={<Shipping
@@ -124,9 +116,9 @@ function App() {
           <Route path="/orders/me" element={<ListOrders />}  />
           <Route path="/order/:id" element={<OrderDetails />}  />
 
-          <Route path="/dashboard" element={<Dashboard />}  />
+          {/* <Route path="/dashboard" element={<Dashboard />}  />
           <Route path="/admin/product" element={<NewProduct  />}  />
-          <Route path="/admin/products" element={<ProductsList />}  />
+          <Route path="/admin/products" element={<ProductsList />}  /> */}
         </Routes>
         <Footer />
       </Router>
