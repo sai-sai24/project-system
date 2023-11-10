@@ -15,7 +15,6 @@ const Shipping = ({ shipping, saveShippingInfo }) => {
     let navigate = useNavigate();
     const submitHandler = (e) => {
         e.preventDefault()
-
         saveShippingInfo({ address, city, phoneNo, postalCode, country })
         navigate('/confirm')
     }

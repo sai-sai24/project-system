@@ -1,15 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { useParams } from "react-router-dom"
 import MetaData from './Layout/Metadata'
-import axios from 'axios';
-
-import Product from './Product/Product';
-import Loader from './Layout/Loader'
+import axios from 'axios'
 import Pagination from 'react-js-pagination'
+import Product from './Product/Product'
+import Loader from './Layout/Loader'
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import Header from './Layout/Header';
-
+import { useParams } from "react-router-dom"
 
 const categories = [
     'Electronics',
@@ -26,26 +23,34 @@ const categories = [
     'Home'
 ]
 const Home = () => {
+    let { keyword } = useParams()
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState([])
     const [error, setError] = useState()
     const [productsCount, setProductsCount] = useState(0)
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1)
     const [resPerPage, setResPerPage] = useState(0)
     const [filteredProductsCount, setFilteredProductsCount] = useState(0)
     const [price, setPrice] = useState([1, 1000]);
     const [category, setCategory] = useState('');
-    let { keyword } = useParams();
 
     const createSliderWithTooltip = Slider.createSliderWithTooltip;
     const Range = createSliderWithTooltip(Slider.Range);
 
-    const getProducts = async (currentPage = 1, keyword = '', price, category = '') => {
-        let link = `${process.env.REACT_APP_API}/api/v1/products?page=${currentPage}&keyword=${keyword}&price[lte]=${price[1]}&price[gte]=${price[0]}`
+    function setCurrentPageNo(pageNumber) {
+        setCurrentPage(pageNumber)
+    }
 
+
+    const getProducts = async (page = 1, keyword = '', price, category='') => {
+        let link = ''
+
+        link = `http://localhost:4001/api/v1/products/?page=${page}&keyword=${keyword}&price[lte]=${price[1]}&price[gte]=${price[0]}`
+        
         if (category) {
             link = `${process.env.REACT_APP_API}/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}`
         }
+
         console.log(link)
         let res = await axios.get(link)
         console.log(res)
@@ -54,42 +59,23 @@ const Home = () => {
         setProductsCount(res.data.productsCount)
         setFilteredProductsCount(res.data.filteredProductsCount)
         setLoading(false)
-
     }
-    let count = productsCount;
+    useEffect(() => {
+        getProducts(currentPage, keyword, price, category)
+    }, [currentPage, keyword, price, category]);
 
+    let count = productsCount
     if (keyword) {
         count = filteredProductsCount
     }
-    function setCurrentPageNo(pageNumber) {
-        setCurrentPage(pageNumber)
-    }
-
-    const loadUser = async () => {
-        try {
-            
-            const { data } = await axios.get('/api/v1/me')
-    
-        } catch (error) {
-            console.log( error.response.data.message)
-            
-        }
-    }
-
-    useEffect(() => {
-        getProducts(currentPage, keyword, price, category)
-    }, [currentPage, keyword, price, category])
-    // console.log(products)
     return (
         <>
             {loading ? <Loader /> : (<Fragment>
                 <MetaData title={'Buy Best Products Online'} />
-                
                 <div className="container container-fluid">
 
                     <h1 id="products_heading">Latest Products</h1>
                     <section id="products" className="container mt-5">
-
                         <div className="row">
                             {keyword ? (
                                 <Fragment>
@@ -148,7 +134,6 @@ const Home = () => {
                                     <Product key={product._id} product={product} col={3} />
                                 ))
                             )}
-
                         </div>
                     </section>
                     {resPerPage <= count && (
@@ -170,7 +155,6 @@ const Home = () => {
             </Fragment>
             )}
         </>
-
     )
 }
 

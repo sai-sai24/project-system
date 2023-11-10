@@ -30,8 +30,6 @@ const OrderDetails = () => {
             const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/order/${id}`, config)
             setOrder(data.order)
             setLoading(false)
-
-
         } catch (error) {
             setError(error.response.data.message)
         }
