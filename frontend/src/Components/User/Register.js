@@ -1,7 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Metadata from '../Layout/Metadata'
-import axios from 'axios'
+import MetaData from '../layout/MetaData'
+
+// import { useAlert } from 'react-alert'
+import { useDispatch, useSelector } from 'react-redux'
+import { register, clearErrors } from '../../actions/userActions'
 
 const Register = () => {
 
@@ -15,22 +18,25 @@ const Register = () => {
 
     const [avatar, setAvatar] = useState('')
     const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg')
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [error, setError] = useState('')
-    const [loading, setLoading] = useState(true)
-   
 
-    let navigate = useNavigate()
+    // const alert = useAlert();
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+
+    const { isAuthenticated, error, loading } = useSelector(state => state.auth);
+
     useEffect(() => {
+
         if (isAuthenticated) {
             navigate('/')
         }
+
         if (error) {
-            console.log(error)
-           setError()
+            // alert.error(error);
+            dispatch(clearErrors());
         }
 
-    }, [error. isAuthenticated, navigate])
+    }, [dispatch, isAuthenticated, error, navigate])
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -41,7 +47,7 @@ const Register = () => {
         formData.set('password', password);
         formData.set('avatar', avatar);
 
-        register(formData)
+        dispatch(register(formData))
     }
 
     const onChange = e => {
@@ -63,35 +69,10 @@ const Register = () => {
         }
     }
 
-    const register = async (userData) => {
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-
-            const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/register`, userData, config)
-            console.log(data.user)
-            setIsAuthenticated(true)
-            setLoading(false)
-            navigate('/')
-            setUser(data.user)
-
-        } catch (error) {
-            setIsAuthenticated(false)
-            setLoading(false)
-            setUser(null)
-            setError(error.response.data.message)
-            console.log(error.response.data.message)
-        }
-    }
-
-
     return (
         <Fragment>
 
-            <Metadata title={'Register User'} />
+            <MetaData title={'Register User'} />
 
             <div className="row wrapper">
                 <div className="col-10 col-lg-5">
@@ -166,7 +147,7 @@ const Register = () => {
                             id="register_button"
                             type="submit"
                             className="btn btn-block py-3"
-                            // disabled={loading ? false : true}
+                            disabled={loading ? true : false}
                         >
                             REGISTER
                         </button>

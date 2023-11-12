@@ -1,66 +1,56 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
-import Loader from '../Layout/Loader'
-import Metadata from '../Layout/Metadata'
+import Loader from '../layout/Loader'
+import MetaData from '../layout/MetaData'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
-import {authenticate} from '../../utils/helpers'
-import { getUser } from '../../utils/helpers';
+
+import { useDispatch, useSelector } from 'react-redux'
+import { login, clearErrors } from '../../actions/userActions'
 
 const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false)
-    
+    const dispatch = useDispatch();
     const navigate = useNavigate()
     let location = useLocation();
-    const redirect = location.search ? new URLSearchParams(location.search).get('redirect') : ''
-    const notify = (error) => toast.error(error, {
-        position: toast.POSITION.BOTTOM_RIGHT
+    const { isAuthenticated, error, loading } = useSelector(state => state.auth);
+    // const redirect = location.search ? location.search.split('=')[1] : ''
+    const redirect = new URLSearchParams(location.search).get('redirect')
+    const notify = (error = '') => toast.error(error, {
+        position: toast.POSITION.BOTTOM_CENTER
     });
-
-    const login = async (email, password) => {
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-            const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/login`, { email, password }, config)
-            console.log(data)
-            authenticate(data, () => navigate("/"))
-            
-        } catch (error) {
-            toast.error("invalid user or password", {
-                position: toast.POSITION.BOTTOM_RIGHT
-            })
+    useEffect(() => {
+        if (isAuthenticated && redirect === 'shipping') {
+            navigate(`/${redirect}`, { replace: true })
         }
-    }
+        else if (isAuthenticated)
+            navigate('/')
+        if (error) {
+           
+            console.log(error)
+            notify(error)
+            dispatch(clearErrors());
+        }
+
+    }, [dispatch, isAuthenticated, error, navigate, redirect])
+
     const submitHandler = (e) => {
         e.preventDefault();
-        login(email, password)
+        dispatch(login(email, password))
     }
-
-    useEffect(() => {
-        if (getUser() && redirect === 'shipping' ) {
-             navigate(`/${redirect}`)
-        }
-    }, [])
 
     return (
         <Fragment>
             {loading ? <Loader /> : (
                 <Fragment>
-                    <Metadata title={'Login'} />
+                    <MetaData title={'Login'} />
 
                     <div className="row wrapper">
                         <div className="col-10 col-lg-5">
-                            <form className="shadow-lg" 
-                            onSubmit={submitHandler}
-                            >
+                            <form className="shadow-lg" onSubmit={submitHandler}>
                                 <h1 className="mb-3">Login</h1>
                                 <div className="form-group">
                                     <label htmlFor="email_field">Email</label>

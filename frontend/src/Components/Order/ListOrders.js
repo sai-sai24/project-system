@@ -1,45 +1,21 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { MDBDataTable } from 'mdbreact'
 
-import MetaData from '../Layout/Metadata'
-import Loader from '../Layout/Loader'
-import axios from 'axios'
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { getToken } from '../../utils/helpers'
-
+import MetaData from '../layout/MetaData'
+import Loader from '../layout/Loader'
+import { useDispatch, useSelector } from 'react-redux'
+import { myOrders, clearErrors } from '../../actions/orderActions'
 const ListOrders = () => {
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
-    const [myOrdersList, setMyOrdersList] = useState([])
-
-    const myOrders = async () => {
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${getToken()}`
-                }
-            }
-            const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/orders/me`, config)
-            console.log(data)
-            setMyOrdersList(data.orders)
-            setLoading(false)
-
-        } catch (error) {
-            setError(error.response.data.message)
-        }
-    }
+    const dispatch = useDispatch();
+    const { loading, error, orders } = useSelector(state => state.myOrders);
     useEffect(() => {
-        myOrders();
+        dispatch(myOrders());
         if (error) {
-            toast.error(error, {
-                position: toast.POSITION.BOTTOM_RIGHT
-            });
-        }
-    }, [error])
+            dispatch(clearErrors())
 
+        }
+    }, [dispatch, error])
     const setOrders = () => {
         const data = {
             columns: [
@@ -71,8 +47,7 @@ const ListOrders = () => {
             ],
             rows: []
         }
-
-        myOrdersList.forEach(order => {
+        orders.forEach(order => {
             data.rows.push({
                 id: order._id,
                 numOfItems: order.orderItems.length,
@@ -85,26 +60,43 @@ const ListOrders = () => {
                         <i className="fa fa-eye"></i>
                     </Link>
             })
-        })
 
+        })
         return data;
     }
 
     return (
         <Fragment>
+
             <MetaData title={'My Orders'} />
+
             <h1 className="my-5">My Orders</h1>
+
             {loading ? <Loader /> : (
+
                 <MDBDataTable
+
                     data={setOrders()}
+
                     className="px-3"
+
                     bordered
+
                     striped
+
                     hover
+
                 />
+
             )}
+
         </Fragment>
+
     )
+
 }
 
+
+
 export default ListOrders
+
