@@ -30,17 +30,17 @@ const Home = () => {
     const createSliderWithTooltip = Slider.createSliderWithTooltip;
     const Range = createSliderWithTooltip(Slider.Range);
     const categories = [
-        'Trousers',
-        'Dress',
-        'Shirt',
-        'Sportswear',
-        'Sweater',
-        'Suit',
-        "Skirts",
-        'Jeans',
-        'Blouse',
-        'Polo Shirt',
-        'Panjamas',
+        'Electronics',
+        'Cameras',
+        'Laptops',
+        'Accessories',
+        'Headphones',
+        'Food',
+        "Books",
+        'Clothes/Shoes',
+        'Beauty/Health',
+        'Sports',
+        'Outdoor',
         'Home'
     ]
 
