@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import MetaData from '../layout/MetaData'
+import MetaData from './layout/MetaData'
 import { useParams } from 'react-router-dom'
 import Pagination from 'react-js-pagination'
 import { toast } from 'react-toastify';
@@ -11,8 +11,8 @@ import 'rc-slider/assets/index.css';
 import { useDispatch, useSelector } from 'react-redux'
 
 import { getProducts } from '../actions/productActions'
-import Product from '../product/Product'
-import Loader from '../layout/Loader'
+import Product from './product/Product'
+import Loader from './layout/Loader'
 
 const Home = () => {
     const dispatch = useDispatch();

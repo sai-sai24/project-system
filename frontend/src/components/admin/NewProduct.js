@@ -1,8 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
 import { useNavigate } from 'react-router-dom'
-import MetaData from './layout/MetaData'
-import Sidebar from '../Sidebar'
+import MetaData from '../layout/MetaData'
+import Sidebar from './Sidebar'
+
 import { toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';

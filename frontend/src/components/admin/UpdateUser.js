@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import MetaData from '../layout/MetaData'
 
-import Sidebar from '../Sidebar'
+import Sidebar from './Sidebar'
 
 import { toast } from 'react-toastify';
 
