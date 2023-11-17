@@ -1,22 +1,23 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import Loader from '../layout/Loader'
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import Loader from '../layout/Loader'; // Update the import path based on your file structure
 
 const ProtectedRoute = ({ children, isAdmin = false }) => {
-    console.log(children.type.name)
+    console.log(children.type.name);
     const { isAuthenticated, loading, user } = useSelector(state => state.auth);
+    
     if (loading === false) {
         if (isAuthenticated === false) {
-            return <Navigate to='/login' />
+            return <Navigate to='/login' />;
         }
         if (isAdmin === true && user.role !== 'admin') {
-            return <Navigate to='/' />
+            return <Navigate to='/' />;
         }
-        return children
+        return children;
     }
+    
     return <Loader />;
-
 };
 
 export default ProtectedRoute;
