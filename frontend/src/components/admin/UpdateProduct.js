@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import MetaData from '../layout/MetaData'
-import Sidebar from './Sidebar'
+import Sidebar from '../Sidebar'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

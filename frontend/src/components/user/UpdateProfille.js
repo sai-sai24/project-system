@@ -1,90 +1,79 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import MetaData from '../layout/MetaData'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom";
-import { updateProfile, loadUser, clearErrors } from '../../actions/userActions'
+import MetaData from '../layout/MetaData'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import { UPDATE_PROFILE_RESET } from '../../constants/userConstants'
+import { useDispatch, useSelector } from 'react-redux'
+import { updatePassword, clearErrors } from '../../actions/userActions'
 
-const UpdateProfile = () => {
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [avatar, setAvatar] = useState('')
-    const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg')
+import { UPDATE_PASSWORD_RESET } from '../../constants/userConstants'
+
+
+const UpdatePassword = () => {
+    const [oldPassword, setOldPassword] = useState('')
+    const [password, setPassword] = useState('')
     const dispatch = useDispatch();
     let navigate = useNavigate();
-    const { user } = useSelector(state => state.auth);
     const { error, isUpdated, loading } = useSelector(state => state.user)
-
-    // console.log(error)
+    const success = (message='' ) => toast.success(message, {
+        position: toast.POSITION.BOTTOM_CENTER
+    });
+    const notify = (error='' ) => toast.error(error, {
+        position: toast.POSITION.BOTTOM_CENTER
+    });
     useEffect(() => {
-        console.log(isUpdated)
-        if (user) {
-            setName(user.name);
-            setEmail(user.email);
-            setAvatarPreview(user.avatar.url)
-        }
         if (error) {
-            // alert.error(error);
+            console.log(error)
+            notify(error)
             dispatch(clearErrors());
         }
         if (isUpdated) {
-            // alert.success('User updated successfully')
-            dispatch(loadUser());
-            navigate('/me',{ replace: true })
+            success('Password updated successfully')
+            navigate('/me')
             dispatch({
-                type: UPDATE_PROFILE_RESET
+                type: UPDATE_PASSWORD_RESET
             })
         }
-    }, [dispatch, error, isUpdated, navigate, user])
+    }, [dispatch,  error, navigate, isUpdated])
     const submitHandler = (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.set('name', name);
-        formData.set('email', email);
-        formData.set('avatar', avatar);
-        dispatch(updateProfile(formData))
-    }
-    const onChange = e => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            if (reader.readyState === 2) {
-                setAvatarPreview(reader.result)
-                setAvatar(reader.result)
-            }
-        }
-        reader.readAsDataURL(e.target.files[0])
+        formData.set('oldPassword', oldPassword);
+        formData.set('password', password);
+        dispatch(updatePassword(formData))
     }
     return (
+
         <Fragment>
-            <MetaData title={'Update Profile'} />
+
+            <MetaData title={'Change Password'} />
+
+
+
             <div className="row wrapper">
 
                 <div className="col-10 col-lg-5">
 
-                    <form className="shadow-lg" onSubmit={submitHandler} encType='multipart/form-data'>
+                    <form className="shadow-lg" onSubmit={submitHandler}>
 
-                        <h1 className="mt-2 mb-5">Update Profile</h1>
-
-
+                        <h1 className="mt-2 mb-5">Update Password</h1>
 
                         <div className="form-group">
 
-                            <label htmlFor="email_field">Name</label>
+                            <label htmlFor="old_password_field">Old Password</label>
 
                             <input
 
-                                type="name"
+                                type="password"
 
-                                id="name_field"
+                                id="old_password_field"
 
                                 className="form-control"
 
-                                name='name'
+                                value={oldPassword}
 
-                                value={name}
-
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={(e) => setOldPassword(e.target.value)}
 
                             />
 
@@ -94,21 +83,19 @@ const UpdateProfile = () => {
 
                         <div className="form-group">
 
-                            <label htmlFor="email_field">Email</label>
+                            <label htmlFor="new_password_field">New Password</label>
 
                             <input
 
-                                type="email"
+                                type="password"
 
-                                id="email_field"
+                                id="new_password_field"
 
                                 className="form-control"
 
-                                name='email'
+                                value={password}
 
-                                value={email}
-
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) => setPassword(e.target.value)}
 
                             />
 
@@ -116,69 +103,15 @@ const UpdateProfile = () => {
 
 
 
-                        <div className='form-group'>
-
-                            <label htmlFor='avatar_upload'>Avatar</label>
-
-                            <div className='d-flex align-items-center'>
-
-                                <div>
-
-                                    <figure className='avatar mr-3 item-rtl'>
-
-                                        <img
-
-                                            src={avatarPreview}
-
-                                            className='rounded-circle'
-
-                                            alt='Avatar Preview'
-
-                                        />
-
-                                    </figure>
-
-                                </div>
-
-                                <div className='custom-file'>
-
-                                    <input
-
-                                        type='file'
-
-                                        name='avatar'
-
-                                        className='custom-file-input'
-
-                                        id='customFile'
-
-                                        accept='image/*'
-
-                                        onChange={onChange}
-
-                                    />
-
-                                    <label className='custom-file-label' htmlFor='customFile'>
-
-                                        Choose Avatar
-
-                                </label>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <button type="submit" className="btn update-btn btn-block mt-4 mb-3" disabled={loading ? true : false} >Update</button>
+                        <button type="submit" className="btn update-btn btn-block mt-4 mb-3" disabled={loading ? true : false} >Update Password</button>
 
                     </form>
 
                 </div>
 
             </div>
+
+
 
         </Fragment>
 
@@ -188,4 +121,4 @@ const UpdateProfile = () => {
 
 
 
-export default UpdateProfile
+export default UpdatePassword

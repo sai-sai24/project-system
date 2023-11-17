@@ -5,7 +5,7 @@ import { MDBDataTable } from 'mdbreact'
 import MetaData from '../layout/MetaData'
 import Loader from '../layout/Loader'
 
-import Sidebar from './Sidebar'
+import Sidebar from '../Sidebar'
 
 import { useDispatch, useSelector } from 'react-redux'
 
