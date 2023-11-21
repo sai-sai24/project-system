@@ -19,7 +19,7 @@ app.use(express.urlencoded({ limit: "100mb", extended: true }));
 app.use(cookieParser());
 // app.use(fileUpload());
 
-app.use("/api/v1", products);
+app.use("/api/v1", product);
 app.use("/api/v1", auth);
 app.use("/api/v1", order);
 app.use(errorMiddleware);

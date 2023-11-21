@@ -30,13 +30,25 @@ const reducer = combineReducers({
 
 let initialState = { 
     cart: {
-        cartItems: localStorage.getItem('cartItems')
-            ? JSON.parse(localStorage.getItem('cartItems'))
-            : [],
-        shippingInfo: localStorage.getItem('shippingInfo')
-             ? JSON.parse(localStorage.getItem('shippingInfo'))
-            : {}
+        cartItems: [],
+        shippingInfo: {}
     }
+}
+
+try {
+    initialState.cart.cartItems = localStorage.getItem('cartItems')
+        ? JSON.parse(localStorage.getItem('cartItems'))
+        : [];
+} catch (error) {
+    console.error('Error parsing cartItems:', error);
+}
+
+try {
+    initialState.cart.shippingInfo = localStorage.getItem('shippingInfo')
+        ? JSON.parse(localStorage.getItem('shippingInfo'))
+        : {};
+} catch (error) {
+    console.error('Error parsing shippingInfo:', error);
 }
 
 const middleware = [thunk]

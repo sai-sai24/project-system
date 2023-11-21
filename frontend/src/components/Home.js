@@ -55,11 +55,9 @@ const Home = () => {
     function setCurrentPageNo(pageNumber) {
         setCurrentPage(pageNumber)
     }
-    let count = productsCount;
     
-    if (keyword) {
-        let count = filteredProductsCount
-    }
+    let count = keyword ? filteredProductsCount : productsCount;
+
     console.log(keyword, count, filteredProductsCount, resPerPage)
     return (
         <Fragment>
@@ -127,7 +125,7 @@ const Home = () => {
                                     </div>
                                 </Fragment>
                             ) : (
-                                products.map(product => (
+                                products && products.map(product => (
                                     <Product key={product._id} product={product} col={3} />
                                 ))
                             )}
