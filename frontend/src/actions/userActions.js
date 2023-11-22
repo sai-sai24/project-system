@@ -83,7 +83,7 @@ export const register = (userData) => async (dispatch) => {
       },
     };
     const { data } = await axios.post(
-      `${process.env.REACT_APP_API}/api/v1/Register`,
+      `${process.env.REACT_APP_API}/api/v1/register`,
       userData,
       config
     );
@@ -103,15 +103,16 @@ export const loadUser = () => async (dispatch) => {
   try {
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       withCredentials: true,
     };
     dispatch({ type: LOAD_USER_REQUEST });
-    const { data } = await axios.get(
-      `${process.env.REACT_APP_API}/api/v1/me`,
-      config
-    );
+
+    // Ensure REACT_APP_API is defined in your environment
+    const apiEndpoint = process.env.REACT_APP_API || 'http://localhost:default_port';
+
+    const { data } = await axios.get(`${apiEndpoint}/api/v1/me`, config);
     dispatch({
       type: LOAD_USER_SUCCESS,
       payload: data.user,
@@ -119,7 +120,7 @@ export const loadUser = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: LOAD_USER_FAIL,
-      payload: error.response.data.message,
+      payload: error.response ? error.response.data.message : 'Network error',
     });
   }
 };
