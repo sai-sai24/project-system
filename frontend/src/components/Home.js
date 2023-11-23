@@ -3,6 +3,7 @@ import MetaData from './layout/MetaData'
 import { useParams } from 'react-router-dom'
 import Pagination from 'react-js-pagination'
 import { toast } from 'react-toastify';
+import axios from 'axios'
 import "react-toastify/dist/ReactToastify.css";
 
 import Slider from 'rc-slider';
@@ -14,63 +15,74 @@ import { getProducts } from '../actions/productActions'
 import Product from './product/Product'
 import Loader from './layout/Loader'
 
+const categories = [
+    'Electronics',
+    'Cameras',
+    'Laptops',
+    'Accessories',
+    'Headphones',
+    'Food',
+    "Books",
+    'Clothes/Shoes',
+    'Beauty/Health',
+    'Sports',
+    'Outdoor',
+    'Home'
+]
+
 const Home = () => {
-    const dispatch = useDispatch();
-    const { loading, products, error, productsCount, resPerPage, filteredProductsCount } = useSelector(state => state.products);
-
-    
-    const [currentPage, setCurrentPage] = useState(1)
-    const [price, setPrice] = useState([1,1000])
-    const [category, setCategory] = useState('');
     let { keyword } = useParams()
+    const [loading, setLoading] = useState(true)
+    const [products, setProducts] = useState([])
+    const [error, setError] = useState()
+    const [productsCount, setProductsCount] = useState(0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [resPerPage, setResPerPage] = useState(0)
+    const [filteredProductsCount, setFilteredProductsCount] = useState(0)
+    const [price, setPrice] = useState([1, 1000]);
+    const [category, setCategory] = useState('');
 
-    const notify = (error = '') => toast.error(error, {
-        position: toast.POSITION.BOTTOM_CENTER
-    });
     const createSliderWithTooltip = Slider.createSliderWithTooltip;
     const Range = createSliderWithTooltip(Slider.Range);
-    const categories = [
-        'Electronics',
-        'Cameras',
-        'Laptops',
-        'Accessories',
-        'Headphones',
-        'Food',
-        "Books",
-        'Clothes/Shoes',
-        'Beauty/Health',
-        'Sports',
-        'Outdoor',
-        'Home'
-    ]
-
-    useEffect(() => {
-        if(error){
-			// return alert.error(error)
-            notify(error)
-		}
-        dispatch(getProducts(keyword, currentPage, price, category))
-    }, [dispatch, error, currentPage, keyword, price, category]);
 
     function setCurrentPageNo(pageNumber) {
         setCurrentPage(pageNumber)
     }
-    
-    let count = keyword ? filteredProductsCount : productsCount;
 
-    console.log(keyword, count, filteredProductsCount, resPerPage)
+
+    const getProducts = async (page = 1, keyword = '', price, category='') => {
+        let link = ''
+
+        link = `${process.env.REACT_APP_API}/api/v1/products/?page=${page}&keyword=${keyword}&price[lte]=${price[1]}&price[gte]=${price[0]}`
+        
+        if (category) {
+            link = `${process.env.REACT_APP_API}/api/v1/products?keyword=${keyword}&page=${currentPage}&price[lte]=${price[1]}&price[gte]=${price[0]}&category=${category}`
+        }
+
+        console.log(link)
+        let res = await axios.get(link)
+        console.log(res)
+        setProducts(res.data.products)
+        setResPerPage(res.data.resPerPage)
+        setProductsCount(res.data.productsCount)
+        setFilteredProductsCount(res.data.filteredProductsCount)
+        setLoading(false)
+    }
+    useEffect(() => {
+        getProducts(currentPage, keyword, price, category)
+    }, [currentPage, keyword, price, category]);
+
+    let count = productsCount
+    if (keyword) {
+        count = filteredProductsCount
+    }
     return (
         <Fragment>
             {loading ? <Loader /> : (
                 <Fragment>
                     <MetaData title={'Buy Best Products Online'} />
                     <h1 id="products_heading">Latest Products</h1>
-                    <section id="products" className="container mt-5">
-                        {/* <div className="row">
-                            {products && products.map(product => (
-                                <Product key={product._id} product={product} />
-                            ))}
-                        </div> */}
+                    <section id="Product" className="container mt-5">
                         <div className="row">
 
                             {keyword ? (
