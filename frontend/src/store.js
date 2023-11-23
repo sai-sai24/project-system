@@ -48,28 +48,19 @@ const reducer = combineReducers({
   review: reviewReducer,
 });
 
-const cartItemsFromStorage = localStorage.getItem('cartItems')
-  ? JSON.parse(localStorage.getItem('cartItems'))
-  : [];
+// Retrieve cartItems and shippingInfo from localStorage
+const cartItemsFromStorage = JSON.parse(localStorage.getItem('cartItems') || '[]');
+const shippingInfoFromStorage = JSON.parse(localStorage.getItem('shippingInfo') || '{}');
 
-const userInfoFromStorage = localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo'))
-  : null;
-
-const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
-  ? JSON.parse(localStorage.getItem('shippingAddress'))
-  : {};
-
-const initialState = {
+// Set initial state with cartItems and shippingInfo
+let initialState = {
   cart: {
     cartItems: cartItemsFromStorage,
-    shippingAddress: shippingAddressFromStorage,
+    shippingInfo: shippingInfoFromStorage,
   },
-  auth: { userInfo: userInfoFromStorage },
 };
 
 const middleware = [thunk];
-
 const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)));
 
 export default store;

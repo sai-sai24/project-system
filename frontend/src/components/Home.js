@@ -29,17 +29,14 @@ const Home = () => {
   const Range = createSliderWithTooltip(Slider.Range);
 
   const categories = [
-    'Electronics',
-    'Cameras',
-    'Laptops',
-    'Accessories',
-    'Headphones',
-    'Food',
-    'Books',
-    'Clothes/Shoes',
-    'Beauty/Health',
-    'Sports',
-    'Outdoor',
+    'Dress',
+    'Jeans',
+    'Shirt',
+    'Suit',
+    'Sportswear',
+    'Shorts',
+    'Sweater',
+    'Skirt',
     'Home',
   ];
 
