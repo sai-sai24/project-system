@@ -46,47 +46,67 @@ export const login = (email, password) => async (dispatch) => {
     toast.error(error, {
       position: toast.POSITION.BOTTOM_CENTER,
     });
+
   try {
     dispatch({ type: LOGIN_REQUEST });
+
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       withCredentials: true,
     };
 
-    const { data } = await axios.post(
-      `${process.env.REACT_APP_API}/api/v1/login`,
-      { email, password },
-      config
-    );
+    // Make sure the REACT_APP_API variable is set correctly in your environment
+    const apiUrl = `${process.env.REACT_APP_API}/api/v1/login`;
+
+    // Use axios.post with try/catch to handle errors
+    const { data } = await axios.post(apiUrl, { email, password }, config);
+
     dispatch({
       type: LOGIN_SUCCESS,
       payload: data.user,
     });
   } catch (error) {
-    console.log(error.response);
-    notify(error);
-    dispatch({
-      type: LOGIN_FAIL,
-      payload: error.response.data.message,
-    });
+    console.error('Login error:', error);
+
+    // Check if the response object exists before accessing its properties
+    if (error.response && error.response.data && error.response.data.message) {
+      notify(error.response.data.message);
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: error.response.data.message,
+      });
+    } else {
+      // Handle generic error (no response or no message)
+      notify('An error occurred while logging in');
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: 'An error occurred while logging in',
+      });
+    }
   }
 };
 
 export const register = (userData) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
+
+    // Check if REACT_APP_API is defined, and provide a default value if not
+    const apiUrl = process.env.REACT_APP_API || 'http://localhost:3000';
+
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
+
     const { data } = await axios.post(
-      `${process.env.REACT_APP_API}/api/v1/register`,
+      `${apiUrl}/api/v1/register`,
       userData,
       config
     );
+
     dispatch({
       type: REGISTER_USER_SUCCESS,
       payload: data.user,
@@ -94,7 +114,7 @@ export const register = (userData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REGISTER_USER_FAIL,
-      payload: error.response.data.message,
+      payload: error.response ? error.response.data.message : 'Unknown error occurred',
     });
   }
 };
