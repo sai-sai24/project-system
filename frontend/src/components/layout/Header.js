@@ -5,10 +5,12 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "../../actions/userActions";
+
 const Header = () => {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
+
   const logoutHandler = () => {
     dispatch(logout());
   };
@@ -18,10 +20,9 @@ const Header = () => {
       <nav className="navbar row">
         <div className="col-12 col-md-3">
           <div className="navbar-brand">
-          <Link to="/">
+            <Link to="/">
               <img src="/images/shopit_logo.png" alt="Shopit Logo" />
-          </Link>
-
+            </Link>
           </div>
         </div>
         <div className="col-12 col-md-6 mt-2 mt-md-0">
@@ -76,8 +77,6 @@ const Header = () => {
                 <Link className="dropdown-item" to="/me">
                   Profile
                 </Link>
-
-                {/*<Link className="dropdown-item text-danger" to="/" onClick={logoutHandler}>*/}
 
                 <Link
                   className="dropdown-item text-danger"
