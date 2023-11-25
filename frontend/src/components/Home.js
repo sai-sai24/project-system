@@ -67,7 +67,7 @@ const Home = () => {
         <Fragment>
           <MetaData title={'Buy Best Products Online'} />
           <h1 id="products_heading">Latest Products</h1>
-          <section id="products" className="container mt-5">
+          <section id="data/product" className="container mt-5">
             <div className="row">
               {keyword ? (
                 <Fragment>
