@@ -92,20 +92,16 @@ export const register = (userData) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
 
-    // Check if REACT_APP_API is defined, and provide a default value if not
+    // Ensure REACT_APP_API is defined in your environment
     const apiUrl = process.env.REACT_APP_API || 'http://localhost:3000';
 
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     };
 
-    const { data } = await axios.post(
-      `${apiUrl}/api/v1/register`,
-      userData,
-      config
-    );
+    const { data } = await axios.post(`${apiUrl}/api/v1/register`, userData, config);
 
     dispatch({
       type: REGISTER_USER_SUCCESS,
@@ -130,7 +126,7 @@ export const loadUser = () => async (dispatch) => {
     dispatch({ type: LOAD_USER_REQUEST });
 
     // Ensure REACT_APP_API is defined in your environment
-    const apiEndpoint = process.env.REACT_APP_API || 'http://localhost:default_port';
+    const apiEndpoint = process.env.REACT_APP_API || 'http://localhost:3000';
 
     const { data } = await axios.get(`${apiEndpoint}/api/v1/me`, config);
     dispatch({
@@ -144,6 +140,7 @@ export const loadUser = () => async (dispatch) => {
     });
   }
 };
+
 
 export const logout = () => async (dispatch) => {
   try {
