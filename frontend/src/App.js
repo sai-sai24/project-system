@@ -107,11 +107,8 @@ function App() {
             </ProtectedRoute>} />
         <Route path="/order/:id"
           element={
-
             <ProtectedRoute >
-
               <OrderDetails />
-
             </ProtectedRoute>} />
         <Route
           path="/dashboard"
@@ -132,15 +129,10 @@ function App() {
         <Route
 
           path="/admin/product"
-
           element={
-
             <ProtectedRoute isAdmin={true} >
-
               <NewProduct />
-
             </ProtectedRoute>
-
           }
 
         />
@@ -150,7 +142,6 @@ function App() {
             <ProtectedRoute isAdmin={true} >
               <UpdateProduct />
             </ProtectedRoute>
-
           }
 
         />
@@ -159,54 +150,35 @@ function App() {
           element={
             <ProtectedRoute isAdmin={true} >
               <OrdersList />
-            </ProtectedRoute>
-
+            </ProtectedRoute> 
           }
 
         />
         <Route
-
           path="/admin/order/:id"
-
           element={
-
             <ProtectedRoute isAdmin={true} >
-
               <ProcessOrder />
-
             </ProtectedRoute>} />
         <Route
-
           path="/admin/users"
-
           element={
-
             <ProtectedRoute isAdmin={true} >
-
               <UsersList />
-
             </ProtectedRoute>} />
         <Route
-
           path="/admin/user/:id"
-
           element={
-
             <ProtectedRoute isAdmin={true} >
-
               <UpdateUser />
-
             </ProtectedRoute>} />
-
         <Route
           path="/admin/reviews"
           element={
             <ProtectedRoute isAdmin={true} >
               <ProductReviews />
             </ProtectedRoute>
-
           }
-
         />
       </Routes>
       {!loading && (!isAuthenticated || user.role !== 'admin') && (
@@ -216,4 +188,4 @@ function App() {
   );
 }
 
-export default App;
+export default App

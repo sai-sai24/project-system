@@ -13,14 +13,11 @@ exports.newProduct = async (req, res, next) => {
   } else {
     images = req.body.images;
   }
-
   let imagesLinks = [];
-
   for (let i = 0; i < images.length; i++) {
     const result = await cloudinary.v2.uploader.upload(images[i], {
       folder: "products",
     });
-
     imagesLinks.push({
       public_id: result.public_id,
 

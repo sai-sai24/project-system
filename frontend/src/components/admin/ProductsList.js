@@ -33,8 +33,6 @@ const ProductsList = () => {
             dispatch({ type: DELETE_PRODUCT_RESET })
         }
 
-
-
     }, [dispatch,  error, navigate, isDeleted, deleteError])
 
     
@@ -69,7 +67,7 @@ const ProductsList = () => {
             ],
             rows: []
         }
-        products.forEach(product => {
+        products.forEach(product => {  
             data.rows.push({
                 id: product._id,
                 name: product.name,

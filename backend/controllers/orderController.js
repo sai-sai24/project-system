@@ -124,7 +124,7 @@ async function updateStock(id, quantity) {
 
   product.stock = product.stock - quantity;
 
-  await product.save({ validateBeforeSave: false });
+  await product.save({ validateBeforeSave:  });
 }
 
 exports.deleteOrder = async (req, res, next) => {

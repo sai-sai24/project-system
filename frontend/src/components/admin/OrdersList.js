@@ -1,73 +1,39 @@
 import React, { Fragment, useEffect } from 'react'
-
 import { Link, useNavigate } from 'react-router-dom'
-
 import { MDBDataTable } from 'mdbreact'
-
-
-
 import MetaData from '../layout/MetaData'
-
 import Loader from '../layout/Loader'
-
 import Sidebar from './Sidebar'
-
 import { toast } from 'react-toastify';
-
 import 'react-toastify/dist/ReactToastify.css';
-
-
-
 import { useDispatch, useSelector } from 'react-redux'
-
 import { allOrders,  clearErrors, 
     deleteOrder 
 } from '../../actions/orderActions'
-
 import { DELETE_ORDER_RESET } from '../../constants/orderConstants'
 
-
-
 const OrdersList = () => {
-
     const dispatch = useDispatch();
-
     let navigate = useNavigate();
-
     const { loading, error, orders } = useSelector(state => state.allOrders);
-
     const { isDeleted } = useSelector(state => state.order)
-
     const errMsg = (message = '') => toast.error(message, {
-
         position: toast.POSITION.BOTTOM_CENTER
-
     });
 
     const successMsg = (message = '') => toast.success(message, {
-
         position: toast.POSITION.BOTTOM_CENTER
-
     });
 
     useEffect(() => {
-
         dispatch(allOrders());
-
         if (error) {
-
             errMsg(error)
-
             dispatch(clearErrors())
-
         }
-
         if (isDeleted) {
-
             successMsg('Order deleted successfully');
-
             navigate('/admin/orders');
-
             dispatch({ type: DELETE_ORDER_RESET })
 
         }
@@ -207,42 +173,23 @@ const OrdersList = () => {
 
 
                 <div className="col-12 col-md-10">
-
                     <Fragment>
-
                         <h1 className="my-5">All Orders</h1>
-
                         {loading ? <Loader /> : (
-
                             <MDBDataTable
-
                                 data={setOrders()}
-
                                 className="px-3"
-
                                 bordered
-
                                 striped
-
                                 hover
-
                             />
-
                         )}
-
                     </Fragment>
-
                 </div>
-
             </div>
-
         </Fragment>
-
     )
-
 }
-
-
 
 export default OrdersList
 
