@@ -18,7 +18,6 @@ const Sidebar = () => {
 
                             <li>
                                 <Link to="/admin/products"><i className="fa fa-clipboard"></i> All</Link>
-
                             </li>
                             <li>
                                 <Link to="/admin/product"><i className="fa fa-plus"></i> Create</Link>
